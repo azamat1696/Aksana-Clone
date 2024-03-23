@@ -2,8 +2,11 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const config = require('./config');
+const loaders = require('./loaders');
+
 const { ProjectRoutes } = require('./api-routes');
 config();
+loaders();
 
 const app = express();
 app.use(express.json())

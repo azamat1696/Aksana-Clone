@@ -1,10 +1,21 @@
+const {insertProject,getProjects} = require("../services/Projects")
+const httpStatus = require('http-status');
 
-const create = async (req, res) => {
-    res.status(200).send('Project created');
+const create =  (req, res) => {
+     insertProject(req.body).then(response => {
+        res.status(httpStatus.OK).send(response);
+     }).catch(err => {
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
+     });
 };
 
-const index = async (req, res) => {
-    res.status(200).send('Project index');
+const index =  (req, res) => {
+    getProjects().then(response => {
+        res.status(httpStatus.OK).send(response);
+     }).catch(err => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
+    });
+
 }
 
 module.exports = {
