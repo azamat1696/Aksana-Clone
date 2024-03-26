@@ -4,7 +4,11 @@ const cors = require('cors');
 const config = require('./config');
 const loaders = require('./loaders');
 
-const { ProjectRoutes } = require('./api-routes');
+const {
+       ProjectRoutes,
+       UserRoutes
+} = require('./api-routes');
+
 config();
 loaders();
 
@@ -14,6 +18,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use(ProjectRoutes.path, ProjectRoutes.router);
+app.use(UserRoutes.path, UserRoutes.router);
 
 
 app.listen(process.env.APP_PORT, () => {
