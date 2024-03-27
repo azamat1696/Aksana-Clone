@@ -8,7 +8,7 @@ const router = express.Router();
 const { create,index } = require('../controllers/Projects');
 
 router.route('/').get(authenticate, index);
-router.route('/').post(validate(createProjectValidation), create);
+router.route('/').post(authenticate,validate(createProjectValidation), create);
 
 
 module.exports = {
