@@ -8,11 +8,14 @@ const list = async () => {
     return Users.find({});
 }
 const loginUser = async (userData) => {
-
     return Users.findOne(userData);
+}
+const update = async (where,data) => {
+    return Users.findOneAndUpdate(where, data, {new: true})
 }
 module.exports = {
     insert,
     list,
-    loginUser
+    loginUser,
+    update
 }

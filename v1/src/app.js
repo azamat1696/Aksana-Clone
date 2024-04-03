@@ -3,14 +3,13 @@ const helmet = require('helmet');
 const cors = require('cors');
 const config = require('./config');
 const loaders = require('./loaders');
+const events = require('./scripts/events');
 
-const {
-       ProjectRoutes,
-       UserRoutes
-} = require('./api-routes');
+const {ProjectRoutes, UserRoutes} = require('./api-routes');
 
 config();
 loaders();
+events();
 
 const app = express();
 app.use(express.json())
@@ -19,7 +18,6 @@ app.use(cors());
 
 app.use(ProjectRoutes.path, ProjectRoutes.router);
 app.use(UserRoutes.path, UserRoutes.router);
-
 
 app.listen(process.env.APP_PORT, () => {
        console.log('Server is running on port 3000');

@@ -1,1 +1,14 @@
 {"level":"info","message":{"_id":"6604add0379950be0da1392b","createdAt":"2024-03-27T23:37:52.831Z","name":"Test project453","updatedAt":"2024-03-27T23:37:52.831Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b24610df07c36e89a8a8","createdAt":"2024-03-27T23:56:54.814Z","name":"Test project453","updatedAt":"2024-03-27T23:56:54.814Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b24c10df07c36e89a8aa","createdAt":"2024-03-27T23:57:00.204Z","name":"Test project453","updatedAt":"2024-03-27T23:57:00.204Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b26b10df07c36e89a8ac","createdAt":"2024-03-27T23:57:31.433Z","name":"Test project453","updatedAt":"2024-03-27T23:57:31.433Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b27d0f8b4fbfff5e97f5","createdAt":"2024-03-27T23:57:49.897Z","name":"Test project453","updatedAt":"2024-03-27T23:57:49.897Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b43014e678dcbf73e7d0","createdAt":"2024-03-28T00:05:04.880Z","updatedAt":"2024-03-28T00:05:04.880Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b445ddebd665b7e1ba09","createdAt":"2024-03-28T00:05:25.670Z","name":"Test project453","updatedAt":"2024-03-28T00:05:25.670Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b449ddebd665b7e1ba0b","createdAt":"2024-03-28T00:05:29.154Z","name":"Test project453","updatedAt":"2024-03-28T00:05:29.154Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b47f19c78a8977b7712c","createdAt":"2024-03-28T00:06:23.497Z","name":"Test project453","updatedAt":"2024-03-28T00:06:23.497Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b48219c78a8977b7712e","createdAt":"2024-03-28T00:06:26.741Z","name":"Test project453","updatedAt":"2024-03-28T00:06:26.741Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b4ffaf1706b419971c31","createdAt":"2024-03-28T00:08:31.449Z","name":"Test project453","updatedAt":"2024-03-28T00:08:31.449Z"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604b5099feb91a4fb2e359a","createdAt":"2024-03-28T00:08:41.723Z","name":"Test project453","updatedAt":"2024-03-28T00:08:41.723Z","user_id":"6604adc2379950be0da13929"},"service":"project-service"}
+{"level":"info","message":{"_id":"6604c3df0c2fcb688ce0cfac","createdAt":"2024-03-28T01:11:59.573Z","name":"Test project453","updatedAt":"2024-03-28T01:11:59.573Z","user_id":"6604adc2379950be0da13929"},"service":"project-service"}
+{"level":"info","message":{"_id":"660c77071138688ddbca207e","createdAt":"2024-04-02T21:22:15.146Z","name":"azamat test todo","updatedAt":"2024-04-02T21:22:15.146Z","user_id":"660c647661ba5b540c68d1a7"},"service":"project-service"}

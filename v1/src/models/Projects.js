@@ -2,10 +2,10 @@ const Mongoose = require('mongoose');
 const logger = require('../scripts/logger/Projects');
 const ProjectSchema = new Mongoose.Schema({
    name: String,
-  /* user_id: {
+   user_id: {
          type: Mongoose.Schema.Types.ObjectId,
-         ref: 'User'
-   }*/
+         ref: 'Users'
+   }
 },{ timestamps: true,versionKey: false });
 
 ProjectSchema.post('save', function (doc,next) {

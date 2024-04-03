@@ -4,11 +4,18 @@ const insertProject = async (projectData) => {
     const project = new Project(projectData)
     return project.save()
 }
-const getProjects = async () => {
-    return Project.find({});
+const getProjects = async (where) => {
+    return Project.find(where || {}).populate({
+        path: 'user_id',
+        select: 'full_name email'
+    });
+}
+const updateProject = async (projectData) => {
+    return  Project.findByIdAndUpdate(projectData.id, projectData, {new: true})
 }
 
 module.exports = {
     insertProject,
-    getProjects
+    getProjects,
+    updateProject
 }
