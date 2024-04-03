@@ -1,4 +1,4 @@
-const {insertProject,getProjects,updateProject} = require("../services/Projects")
+const {insertProject,getProjects,updateProject,removeProject} = require("../services/Projects")
 const httpStatus = require('http-status');
 
 const index =  (req, res) => {
@@ -23,16 +23,33 @@ const update =  (req, res) => {
         res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
         return;
     }
-    req.body.id = req.params.id;
-    updateProject(req.body).then(response => {
+    updateProject(req.params.id).then(response => {
         res.status(httpStatus.OK).send(response);
     }).catch(err => {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
     });
 }
+const deleteProject = async (req,res) => {
+    if (!req.params.id) {
+        res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
+        return;
+    }
+    const id = req.params.id;
+    removeProject(id).then(response => {
+        if (!response) {
+            res.status(httpStatus.NOT_FOUND).send({error: "Project not found"});
+            return;
+        }
+        res.status(httpStatus.OK).send({message: "Project deleted successfully"});
+    }).catch(err => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
+    });
+
+}
 
 module.exports = {
     create,
     index,
-    update
+    update,
+    deleteProject
 }

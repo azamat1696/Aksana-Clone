@@ -13,9 +13,13 @@ const loginUser = async (userData) => {
 const update = async (where,data) => {
     return Users.findOneAndUpdate(where, data, {new: true})
 }
+const remove = async (where) => {
+    return Users.findOneAndDelete(where, {new: true})
+}
 module.exports = {
     insert,
     list,
     loginUser,
-    update
+    update,
+    remove
 }

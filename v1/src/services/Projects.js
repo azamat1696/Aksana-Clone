@@ -13,9 +13,13 @@ const getProjects = async (where) => {
 const updateProject = async (projectData) => {
     return  Project.findByIdAndUpdate(projectData.id, projectData, {new: true})
 }
+const removeProject = async (id) => {
+    return Project.findByIdAndDelete(id, {new: true})
+}
 
 module.exports = {
     insertProject,
     getProjects,
-    updateProject
+    updateProject,
+    removeProject
 }
