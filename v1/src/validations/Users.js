@@ -21,10 +21,14 @@ const changePasswordValidation = Joi.object({
     old_password: Joi.string().required().min(8),
     new_password: Joi.string().required().min(8),
 });
+const updateProfileImageValidation = Joi.object({
+    file: Joi.string().required()
+});
 module.exports = {
     createUserValidation,
     loginUserValidation,
     resetPasswordValidation,
     updateUserValidation,
-    changePasswordValidation
+    changePasswordValidation,
+    updateProfileImageValidation
 }

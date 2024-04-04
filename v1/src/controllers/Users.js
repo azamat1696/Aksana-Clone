@@ -4,6 +4,8 @@ const {passwordHash,generateAccessToken,generateRefreshToken} = require("../scri
 const projectService = require('../services/Projects');
 const uuid = require('uuid');
 const eventEmitter = require('../scripts/events/eventEmitter');
+const path = require('path');
+const fs = require('fs');
 const create =  (req, res) => {
     req.body.password =  passwordHash(req.body.password);
     insert(req.body).then(response => {
@@ -100,6 +102,34 @@ const changePassword = async (req,res) => {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
     });
 }
+const updateProfileImage = async (req,res) => {
+    // check file exist in request
+    if (!req?.files?.profile_image) return res.status(httpStatus.BAD_REQUEST).send({message: "Profile image is required"});
+    // check file type
+    const extension = path.extname(req.files.profile_image.name);
+    const fileName = `${req.user?._doc?._id}${extension}`;
+    const filePath = path.join(__dirname, '../' ,"uploads/users", fileName);
+    const checkFolderPath = path.join(__dirname, '../' ,"uploads/users");
+    // check folder exist
+    if (!fs.existsSync(checkFolderPath)) fs.mkdirSync(checkFolderPath, { recursive: true });
+
+    //check file names are same if same delete old file if not move new file
+    if (req.user?._doc?.profile_image && req.user?._doc?.profile_image !== '/uploads/users/'+fileName) {
+        const oldFilePath = path.join(__dirname, '../' ,req.user?._doc?.profile_image);
+        if (fs.existsSync(oldFilePath)) fs.unlinkSync(oldFilePath);
+    }
+    // move file to folder
+    await req.files.profile_image.mv(filePath, function (err) {
+        if (err) return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
+           update({_id: req.user?._doc?._id}, { profile_image: '/uploads/users/'+fileName }).then(response => {
+               if (!response) return res.status(httpStatus.NOT_FOUND).send({message: "User not found"});
+               res.status(httpStatus.OK).send(response);
+           }).catch(err => {
+               res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
+           });
+     })
+
+}
 module.exports = {
     create,
     index,
@@ -108,5 +138,6 @@ module.exports = {
     resetPassword,
     updateUser,
     deleteUser,
-    changePassword
+    changePassword,
+    updateProfileImage
 }

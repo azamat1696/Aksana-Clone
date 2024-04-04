@@ -11,6 +11,7 @@ const loginUser = async (userData) => {
     return Users.findOne(userData);
 }
 const update = async (where,data) => {
+    console.log(where,data)
     return Users.findOneAndUpdate(where, data, {new: true})
 }
 const remove = async (where) => {
