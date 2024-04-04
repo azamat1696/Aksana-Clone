@@ -16,4 +16,4 @@ ProjectSchema.post('save', function (doc,next) {
     next();
 });
 
-module.exports = Mongoose.model('Project', ProjectSchema);
+module.exports = Mongoose.model('Projects', ProjectSchema);

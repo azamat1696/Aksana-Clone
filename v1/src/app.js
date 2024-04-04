@@ -6,7 +6,7 @@ const config = require('./config');
 const loaders = require('./loaders');
 const events = require('./scripts/events');
 const path = require('path');
-const {ProjectRoutes, UserRoutes} = require('./api-routes');
+const {ProjectRoutes, UserRoutes,SectionRoutes} = require('./api-routes');
 
 config();
 loaders();
@@ -21,6 +21,7 @@ app.use(fileUpload());
 
 app.use(ProjectRoutes.path, ProjectRoutes.router);
 app.use(UserRoutes.path, UserRoutes.router);
+app.use(SectionRoutes.path, SectionRoutes.router);
 
 app.listen(process.env.APP_PORT, () => {
        console.log('Server is running on port 3000');

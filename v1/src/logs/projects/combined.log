@@ -12,3 +12,5 @@
 {"level":"info","message":{"_id":"6604b5099feb91a4fb2e359a","createdAt":"2024-03-28T00:08:41.723Z","name":"Test project453","updatedAt":"2024-03-28T00:08:41.723Z","user_id":"6604adc2379950be0da13929"},"service":"project-service"}
 {"level":"info","message":{"_id":"6604c3df0c2fcb688ce0cfac","createdAt":"2024-03-28T01:11:59.573Z","name":"Test project453","updatedAt":"2024-03-28T01:11:59.573Z","user_id":"6604adc2379950be0da13929"},"service":"project-service"}
 {"level":"info","message":{"_id":"660c77071138688ddbca207e","createdAt":"2024-04-02T21:22:15.146Z","name":"azamat test todo","updatedAt":"2024-04-02T21:22:15.146Z","user_id":"660c647661ba5b540c68d1a7"},"service":"project-service"}
+{"level":"info","message":{"_id":"660f1b50e56c25c12ce6f2e5","createdAt":"2024-04-04T21:27:44.959Z","name":"azamat test todo","updatedAt":"2024-04-04T21:27:44.959Z","user_id":"660d3ab82a7c401729d1a8b9"},"service":"project-service"}
+{"level":"info","message":{"_id":"660f24fd6498ac0f0a69cbe0","createdAt":"2024-04-04T22:09:01.280Z","name":"azamat test project","updatedAt":"2024-04-04T22:09:01.280Z","user_id":"660d3ab82a7c401729d1a8b9"},"service":"project-service"}

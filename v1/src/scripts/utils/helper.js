@@ -5,7 +5,7 @@ const passwordHash = (password) => {
     return hmacSha256(password,hmacSha1(password, process.env.PASSWORD_SECRET).toString()).toString();
 }
 const generateAccessToken = (user) => {
-    return JWT.sign({name:user.full_name,...user}, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '15m' });
+    return JWT.sign({name:user.full_name,...user}, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '60m' });
 }
 const generateRefreshToken = (user) => {
     return JWT.sign({name:user.full_name,...user}, process.env.REFRESH_TOKEN_SECRET_KEY);
