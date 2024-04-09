@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { create,index,update,deleteSection } = require('../controllers/Sections');
 
-router.route('/:projectId').get(authenticate, index);
+router.route('/:id').get(authenticate, index);
 router.route('/').post(authenticate,validate(createSectionValidation), create);
 router.route('/:id').patch(authenticate,validate(updateSectionValidation), update);
 router.route('/:id').delete(authenticate, deleteSection);

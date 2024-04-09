@@ -1,11 +1,12 @@
 const {insert,list,loginUser, update,remove} = require("../services/Users")
 const httpStatus = require('http-status');
 const {passwordHash,generateAccessToken,generateRefreshToken} = require("../scripts/utils/helper");
-const projectService = require('../services/Projects');
+const Service = require('../services/Projects');
 const uuid = require('uuid');
 const eventEmitter = require('../scripts/events/eventEmitter');
 const path = require('path');
 const fs = require('fs');
+const ProjectService = new Service();
 const create =  (req, res) => {
     req.body.password =  passwordHash(req.body.password);
     insert(req.body).then(response => {
@@ -40,7 +41,7 @@ const login = (req,res) => {
     });
 }
 const getProjects = async (req,res) => {
-    return projectService.getProjects({user_id: req.user?._doc?._id}).then(response => {
+    return ProjectService.list({user_id: req.user?._doc?._id}).then(response => {
         res.status(httpStatus.OK).send(response);
     }).catch(err => {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);

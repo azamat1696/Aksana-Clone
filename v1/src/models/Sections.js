@@ -5,11 +5,11 @@ const SectionSchema = new Mongoose.Schema({
     name: String,
     user_id: {
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Users'
+        ref: 'User'
     },
     project_id: {
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Projects'
+        ref: 'Project'
     },
     order: Number
 },{ timestamps: true , versionKey: false});

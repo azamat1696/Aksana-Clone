@@ -30,4 +30,4 @@ UserSchema.post('save', function (doc, next) {
     next();
 });
 
-module.exports = Mongoose.model('Users', UserSchema);
+module.exports = Mongoose.model('User', UserSchema);

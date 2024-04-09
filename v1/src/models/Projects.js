@@ -4,7 +4,7 @@ const ProjectSchema = new Mongoose.Schema({
    name: String,
    user_id: {
          type: Mongoose.Schema.Types.ObjectId,
-         ref: 'Users'
+         ref: 'User'
    }
 },{ timestamps: true,versionKey: false });
 
@@ -16,4 +16,4 @@ ProjectSchema.post('save', function (doc,next) {
     next();
 });
 
-module.exports = Mongoose.model('Projects', ProjectSchema);
+module.exports = Mongoose.model('Project', ProjectSchema);
