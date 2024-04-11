@@ -1,48 +1,30 @@
 const httpStatus = require('http-status');
 const SectionService = require('../services/SectionService');
+const ApiErrors = require("../errors/ApiErrors");
 
 class SectionController {
-
-    index(req, res){
-        // check if projectId is provided
-        if (!req?.params?.id) return res.status(httpStatus.BAD_REQUEST).send({error: "projectId is required"});
+    index(req, res, next){
         SectionService.list().then(response => {
             res.status(httpStatus.OK).send(response);
-        }).catch(() => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "No sections found" });
-        });
-
+        }).catch((err) => next(new ApiErrors(err.message, httpStatus.INTERNAL_SERVER_ERROR)));
     }
-    create  (req, res){
+    create(req, res, next){
         req.body.user_id = req.user
         SectionService.create(req.body).then(response => {
             res.status(httpStatus.OK).send(response);
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
     };
 
-    update  (req, res){
-        if (!req.params) {
-            res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
-            return;
-        }
+    update  (req, res, next){
         SectionService.update(req.params.id,req.body).then(response => {
             res.status(httpStatus.OK).send(response);
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
     }
-    deleteSection(req,res){
-        if (!req.params.id) return res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
-
+    deleteSection(req,res,next){
         SectionService.delete(req.params.id).then(response => {
-            if (!response) return res.status(httpStatus.NOT_FOUND).send({error: "Section not found"});
-
+            if (!response) return next(new ApiErrors("Section not found", httpStatus.NOT_FOUND));
             res.status(httpStatus.OK).send({message: "Section deleted successfully"});
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
 
     }
 

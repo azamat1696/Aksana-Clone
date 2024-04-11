@@ -6,6 +6,7 @@ const config = require('./config');
 const loaders = require('./loaders');
 const events = require('./scripts/events');
 const path = require('path');
+const errorHandler = require('./middlewares/errorHandler');
 const {ProjectRoutes, UserRoutes,SectionRoutes,TaskRoutes} = require('./api-routes');
 
 config();
@@ -23,6 +24,13 @@ app.use(ProjectRoutes.path, ProjectRoutes.router);
 app.use(UserRoutes.path, UserRoutes.router);
 app.use(SectionRoutes.path, SectionRoutes.router);
 app.use(TaskRoutes.path, TaskRoutes.router);
+app.use((req, res,next) => {
+    const error = new Error('Aradığınız sayfa bulunamadı...');
+    error.status = 404;
+    next(error);
+});
+app.use(errorHandler);
+
 
 app.listen(process.env.APP_PORT, () => {
        console.log('Server is running on port 3000');

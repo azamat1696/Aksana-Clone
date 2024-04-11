@@ -1,52 +1,38 @@
 const httpStatus = require('http-status');
 const TaskService = require('../services/TaskService');
+const ApiErrors = require("../errors/ApiErrors");
 
 class TaskController {
 
-    index(req, res){
-        // check if projectId is provided
-        if (!req?.params?.sectionId) return res.status(httpStatus.BAD_REQUEST).send({error: "projectId is required"});
-        TaskService.list({section_id: req.params.sectionId }).then(response => {
+    index(req, res, next){
+        TaskService.list({section_id: req.params.id }).then(response => {
             res.status(httpStatus.OK).send(response);
-        }).catch(() => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "No sections found" });
-        });
-
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
     }
-    create(req, res){
+    create(req, res, next){
         req.body.user_id = req.user
         TaskService.create(req.body).then(response => {
-            console.log(response)
             res.status(httpStatus.OK).send(response);
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
     };
-    update(req, res){
-        if (!req.params) return res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
-        TaskService.update(req.params.id,req.body).then(response => {
-            if (!response) return res.status(httpStatus.NOT_FOUND).send({error: "Task not found"});
+    update(req, res, next){
+         TaskService.update(req.params.id,req.body).then(response => {
+            if (!response) return next(new ApiErrors("Task not found", httpStatus.NOT_FOUND));
             res.status(httpStatus.OK).send(response);
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
     }
-    deleteTask(req,res){
-        if (!req.params.id) return res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
-        TaskService.delete(req.params.id).then(response => {
-            if (!response) return res.status(httpStatus.NOT_FOUND).send({error: "Section not found"});
+    deleteTask(req,res, next){
+         TaskService.delete(req.params.id).then(response => {
+            if (!response) return next(new ApiErrors("Task not found", httpStatus.NOT_FOUND));
             res.status(httpStatus.OK).send({message: "Section deleted successfully"});
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
 
     }
-    makeComment(req,res){
+    makeComment(req,res, next){
         req.body.user_id = req.user
-        if (!req.params.id) return res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
         TaskService.findOne({_id: req.params.id})
             .then(mainTask => {
-                if (!mainTask) return res.status(httpStatus.NOT_FOUND).send({error: "Task not found"});
+                if (!mainTask) return next(new ApiErrors("Task not found", httpStatus.NOT_FOUND));
                 const comment = {
                     value: req.body.comment,
                     user_id: req.user,
@@ -55,65 +41,57 @@ class TaskController {
                 }
                 mainTask.comments.push(comment);
                 mainTask.save().then(response => {
-                    if (!response) return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "Error saving comment"});
+                    if (!response) return next(new ApiErrors("Error saving comment", httpStatus.INTERNAL_SERVER_ERROR));
                     res.status(httpStatus.OK).send(response);
-                }).catch(err => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err))
+                }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)))
 
             })
-            .catch(err => {
-                res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-            });
+            .catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
     };
-    updateComment(req,res) {
-        if (!req.params.taskId) return res.status(httpStatus.BAD_REQUEST).send({error: "taskId is required"});
-        if (!req.params.commentId) return res.status(httpStatus.BAD_REQUEST).send({error: "commentId is required"});
-        TaskService.findOne({_id: req.params.taskId}).then(mainTask => {
-            if (!mainTask) return res.status(httpStatus.NOT_FOUND).send({error: "Task not found"});
+    updateComment(req,res, next) {
+        TaskService.findOne({_id: req.params.id}).then(mainTask => {
+            if (!mainTask) return next(new ApiErrors("Task not found", httpStatus.NOT_FOUND));
             const comment = mainTask.comments.id(req.params.commentId);
-            if (!comment) return res.status(httpStatus.NOT_FOUND).send({error: "Comment not found"});
+            if (!comment) return next(new ApiErrors("Comment not found", httpStatus.NOT_FOUND));
             comment.value = req.body.comment;
             comment.updated_at = new Date();
             mainTask.save().then(response => {
-                if (!response) return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "Error saving comment"});
+                if (!response) return next(new ApiErrors("Error saving comment", httpStatus.INTERNAL_SERVER_ERROR));
                 res.status(httpStatus.OK).send(response);
-            }).catch(err => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err))
+            }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)))
         })
     }
-    deleteComment(req,res){
-        if (!req?.params?.taskId) return res.status(httpStatus.BAD_REQUEST).send({error: "taskId is required"});
-        if (!req?.params?.commentId) return res.status(httpStatus.BAD_REQUEST).send({error: "commentId is required"});
-        TaskService.findOne({_id: req.params.taskId}).then(mainTask => {
-            if (!mainTask) return res.status(httpStatus.NOT_FOUND).send({error: "Task not found"});
+    deleteComment(req,res, next){
+        TaskService.findOne({_id: req.params.id}).then(mainTask => {
+            if (!mainTask) return next(new ApiErrors("Task not found", httpStatus.NOT_FOUND));
             const comment = mainTask.comments.id(req.params.commentId);
-            if (!comment) return res.status(httpStatus.NOT_FOUND).send({error: "Comment not found"});
+            if (!comment) return next(new ApiErrors("Comment not found", httpStatus.NOT_FOUND));
             comment.deleteOne();
             mainTask.save().then(response => {
-                if (!response) return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "Error saving comment"});
+                if (!response) return next(new ApiErrors("Error deleting comment", httpStatus.INTERNAL_SERVER_ERROR));
                 res.status(httpStatus.OK).send(response);
-            }).catch(err => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err))
+            }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)))
         })
     }
-    addSubTask(req,res){
-        if (!req?.params?.taskId) return res.status(httpStatus.BAD_REQUEST).send({error: "Task id is required"});
-        TaskService.findOne({_id: req.params.taskId}).then(mainTask => {
-            if (!mainTask) return res.status(httpStatus.NOT_FOUND).send({error: "Task not found"});
+    addSubTask(req,res, next){
+        TaskService.findOne({_id: req.params.id}).then(mainTask => {
+            if (!mainTask) return next(new ApiErrors("Task not found", httpStatus.NOT_FOUND));
             req.body.user_id = req.user
             TaskService.create(req.body).then(subTask => {
-                if (!subTask) return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "Error saving sub task"});
+                if (!subTask) return next(new ApiErrors("Error creating sub task", httpStatus.INTERNAL_SERVER_ERROR));
                 mainTask.sub_tasks.push(subTask);
                 mainTask.save().then(response => {
-                    if (!response) return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "Error saving sub task"});
+                    if (!response) return next(new ApiErrors("Error saving sub task", httpStatus.INTERNAL_SERVER_ERROR));
                     res.status(httpStatus.OK).send(response);
-                }).catch(err => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err))
-            }).catch(err => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err))
-        }).catch(err => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err))
+                }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)))
+            }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)))
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)))
     }
-    fetchTask(req,res){
-        if (!req.params?.taskId) return res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
-        TaskService.findOne({_id: req.params.taskId},true).then(response => {
-            if (!response) return res.status(httpStatus.NOT_FOUND).send({error: "Task not found"});
+    fetchTask(req,res, next){
+        TaskService.findOne({_id: req.params.id},true).then(response => {
+            if (!response) return next(new ApiErrors("Task not found", httpStatus.NOT_FOUND));
             res.status(httpStatus.OK).send(response);
-        }).catch(err => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err));
+        }).catch((err) => next(new ApiErrors(err?.message, httpStatus.INTERNAL_SERVER_ERROR)));
     }
 
 }

@@ -1,54 +1,31 @@
 const httpStatus = require('http-status');
 const ProjectService = require('../services/ProjectService');
-
+const ApiErrors = require('../errors/ApiErrors');
 class ProjectController {
-    index (req, res) {
+    index (req, res, next) {
         ProjectService.list({user_id: req.user._doc._id}).then(response => {
             res.status(httpStatus.OK).send(response);
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err.message, httpStatus.INTERNAL_SERVER_ERROR)));
 
     }
-    create (req, res)  {
+    create (req, res,next)  {
         req.body.user_id = req.user
         ProjectService.create(req.body).then(response => {
             res.status(httpStatus.OK).send(response);
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err.message, httpStatus.INTERNAL_SERVER_ERROR)));
     };
 
-    update(req, res) {
-        if (!req.params) {
-            res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
-            return;
-        }
+    update(req, res, next) {
         ProjectService.update(req.params.id,req.body).then(response => {
-            if (!response) {
-                res.status(httpStatus.NOT_FOUND).send({error: "Project not found"});
-                return;
-            }
+            if (!response) return next(new ApiErrors('Project not found', httpStatus.NOT_FOUND));
             res.status(httpStatus.OK).send(response);
-        }).catch(() => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: "Project not found"});
-        });
+        }).catch((err) => next(new ApiErrors(err.message, httpStatus.INTERNAL_SERVER_ERROR)));
     }
-    deleteProject (req,res){
-        if (!req.params.id) {
-            res.status(httpStatus.BAD_REQUEST).send({error: "id is required"});
-            return;
-        }
-        const id = req.params.id;
-        ProjectService.delete(id).then(response => {
-            if (!response) {
-                res.status(httpStatus.NOT_FOUND).send({error: "Project not found"});
-                return;
-            }
+    deleteProject (req,res,next){
+        ProjectService.delete(req.params.id).then(response => {
+            if (!response) return next(new ApiErrors('Project not found', httpStatus.NOT_FOUND));
             res.status(httpStatus.OK).send({message: "Project deleted successfully"});
-        }).catch(err => {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err);
-        });
+        }).catch((err) => next(new ApiErrors(err.message, httpStatus.INTERNAL_SERVER_ERROR)));
 
     }
 }

@@ -1,5 +1,6 @@
 //validate middleware
 const validate = require('../middlewares/validate');
+const idChecker = require('../middlewares/idChecker');
 // validation schema
 const { createUserValidation,
     loginUserValidation,
@@ -17,10 +18,9 @@ router.route('/').patch(authenticate,validate(updateUserValidation), UserControl
 router.route('/login').post(validate(loginUserValidation),UserController.login);
 router.route('/projects').get(authenticate,UserController.getProjects);
 router.route('/reset-password').post(validate(resetPasswordValidation),UserController.resetPassword);
-router.route('/:id').delete(authenticate,UserController.deleteUser);
+router.route('/:id').delete(idChecker,authenticate,UserController.deleteUser);
 router.route('/change-password').patch(authenticate,validate(changePasswordValidation),UserController.changePassword);
 router.route('/update-profile-image').post(authenticate,UserController.updateProfileImage);
-
 
 module.exports = {
     router,
