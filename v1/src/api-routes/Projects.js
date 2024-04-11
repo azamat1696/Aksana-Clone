@@ -5,12 +5,12 @@ const authenticate = require('../middlewares/authenticate');
 const { createProjectValidation,updateProjectValidation } = require('../validations/Projects');
 const express = require('express');
 const router = express.Router();
-const { create,index,update,deleteProject } = require('../controllers/Projects');
+const ProjectController= require('../controllers/Project');
 
-router.route('/').get(authenticate, index);
-router.route('/').post(authenticate,validate(createProjectValidation), create);
-router.route('/:id').patch(authenticate,validate(updateProjectValidation), update);
-router.route('/:id').delete(authenticate, deleteProject);
+router.route('/').get(authenticate, ProjectController.index);
+router.route('/').post(authenticate,validate(createProjectValidation), ProjectController.create);
+router.route('/:id').patch(authenticate,validate(updateProjectValidation), ProjectController.update);
+router.route('/:id').delete(authenticate, ProjectController.deleteProject);
 
 module.exports = {
     router,

@@ -19,7 +19,9 @@ class BaseService {
     async update(where, data) {
         return this.model.findByIdAndUpdate(where, data, { new: true });
     }
-
+    async updateWhere(where, data) {
+        return this.model.findOneAndUpdate(where,data, { new: true });
+    }
     async delete(id) {
         return this.model.findByIdAndDelete(id, { new: true });
     }

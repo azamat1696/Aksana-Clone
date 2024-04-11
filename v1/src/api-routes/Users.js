@@ -5,22 +5,21 @@ const { createUserValidation,
     loginUserValidation,
     resetPasswordValidation,
     updateUserValidation,
-    changePasswordValidation,
-    updateProfileImageValidation
+    changePasswordValidation
 } = require('../validations/Users');
 const express = require('express');
 const router = express.Router();
-const { create,index,login,getProjects,resetPassword ,updateUser, deleteUser,changePassword,updateProfileImage} = require('../controllers/Users');
+const UserController = require('../controllers/User');
 const authenticate = require('../middlewares/authenticate');
-router.get('/', index);
-router.route('/').post(validate(createUserValidation), create);
-router.route('/').patch(authenticate,validate(updateUserValidation), updateUser);
-router.route('/login').post(validate(loginUserValidation),login);
-router.route('/projects').get(authenticate,getProjects);
-router.route('/reset-password').post(validate(resetPasswordValidation),resetPassword);
-router.route('/:id').delete(authenticate,deleteUser);
-router.route('/change-password').patch(authenticate,validate(changePasswordValidation),changePassword);
-router.route('/update-profile-image').post(authenticate,updateProfileImage);
+router.get('/', UserController.index);
+router.route('/').post(validate(createUserValidation), UserController.create);
+router.route('/').patch(authenticate,validate(updateUserValidation), UserController.updateUser);
+router.route('/login').post(validate(loginUserValidation),UserController.login);
+router.route('/projects').get(authenticate,UserController.getProjects);
+router.route('/reset-password').post(validate(resetPasswordValidation),UserController.resetPassword);
+router.route('/:id').delete(authenticate,UserController.deleteUser);
+router.route('/change-password').patch(authenticate,validate(changePasswordValidation),UserController.changePassword);
+router.route('/update-profile-image').post(authenticate,UserController.updateProfileImage);
 
 
 module.exports = {
